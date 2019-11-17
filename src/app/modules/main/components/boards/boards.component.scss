@@ -1,0 +1,395 @@
+@import '../../../../../styleguide/shared';
+
+:host ::ng-deep .ui-toast-message-content {
+  background: $color-white;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+:host ::ng-deep .pi-exclamation-triangle {
+  color: $color-red;
+}
+
+:host ::ng-deep .ui-toast .ui-toast-message.ui-toast-message-warn .ui-toast-close-icon {
+  color: $color-gray;
+}
+
+.toast-title {
+  color: $color-standard;
+}
+
+.bc-card {
+  @include board-card;
+  top: 10px;
+  position: relative;
+  left: 10px;
+  margin-right: 20px;
+
+  &:hover {
+    box-shadow: $box-shadow-2;
+  }
+
+  .fill-text {
+    position: relative;
+    top: -40px;
+    font-size: 10px;
+    left: 23px;
+    font-weight: 600;
+    color: #FF6060;
+  }
+
+  .bc-footer {
+    margin: 0;
+
+    .bc-action-icon {
+      text-align: right;
+
+      img {
+        height: 18px;
+        width: 18px;
+        margin-right: 15px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .col-2 {
+      padding: 5px 0;
+    }
+
+    .col-5 {
+      padding: 0;
+      padding-left: 10px;
+      max-width: 90px;
+    }
+  }
+}
+
+.btn-confirm {
+  @include btn-default;
+  text-shadow: $text-shadow;
+}
+
+.btn-reject {
+  @include btn-gradient-blue;
+  text-shadow: $text-shadow;
+}
+
+.board-box {
+  margin: 0 10px;
+  min-width: 270px;
+  max-width: 270px;
+  align-content: center;
+}
+
+.board-container {
+  @include main-container;
+
+  .board-header-container {
+    margin-bottom: 10px;
+
+    .col-md-4 {
+      padding: 0 4px;
+    }
+  }
+
+  padding: 20px 0;
+  height: auto;
+  margin: 0;
+
+  h4 {
+    margin-bottom: 5px;
+  }
+
+  .bc-icon-container,
+  .fa-trash-alt {
+    cursor: pointer;
+  }
+
+  .btn-create-web {
+    @include btn-gradient-blue;
+    max-width: 160px;
+    height: 40px;
+    min-width: 130px;
+  }
+
+  .btn-create-mobile {
+    @include btn-gradient-blue;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .btn-search-mobile {
+    @include btn-transparent;
+    border: thin $color-lighter-gray solid;
+    color: $color-lighter-gray;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-shadow: none;
+  }
+
+  .board-header {
+    margin-bottom:5px;
+
+    .btn-action-mobile {
+      display: none;
+      height: 40px;
+      width: auto;
+      float: right;
+
+      .btn {
+        margin: 5px;
+        padding: 9px;
+
+        i {
+          font-size: 18px;
+          padding: 1px;
+        }
+      }
+    }
+  }
+}
+
+.o-l-p {
+  padding: 25px 5px !important;
+}
+
+.r-l-p {
+  padding: 17px 5px !important;
+}
+
+.m-l-p {
+  padding: 5px !important;
+}
+
+.bc-content {
+  cursor: pointer;
+}
+
+.board-all__img-container {
+  padding: 17px 15px;
+  border-radius: 50%;
+  background: $bg-primary;
+  max-height: 60px;
+  max-width: 60px !important;
+  top: 6px;
+
+  img {
+    padding: 12px 9px;
+  }
+}
+
+.board-all__title {
+  margin-top: 23px;
+  margin-left: 10px;
+}
+
+.board-all__footer {
+  font-size: 14px;
+  font-weight: 600;
+  background: #F4F8FD;
+  height: 45px;
+  padding: 10px;
+  border-top: thin $border-line-color solid;
+  margin: 0;
+
+  p {
+    text-align: center;
+    margin: 0 auto;
+    color: $color-gray;
+  }
+}
+
+.board-all__footer-count {
+  color: $color-primary;
+
+  .board-content {
+    border-top: thin $border-line-color solid;
+    padding: 10px 0;
+  }
+}
+
+:host ::ng-deep .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem .ui-menuitem-link {
+  padding: 10px 30px;
+  cursor: pointer;
+}
+
+:host ::ng-deep .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-active .ui-menuitem-link .ui-menuitem-text {
+  color: $color-black;
+}
+
+:host ::ng-deep .ui-tabmenu .ui-tabmenu-nav {
+  border-bottom: none;
+}
+
+:host ::ng-deep .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem:not(.ui-state-active):not(.ui-state-disabled):hover {
+  background-color: transparent;
+  border: none;
+}
+
+:host ::ng-deep .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem {
+  border: none;
+  background-color: transparent;
+}
+
+:host ::ng-deep .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-active {
+  background-color: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 3px $color-primary solid;
+}
+
+@media (min-width: 768px) {
+  :host ::ng-deep .members-dialog .ui-dialog {
+    width: 1000px !important;
+  }
+
+  :host ::ng-deep .new-board-dialog {
+    .ui-dialog-content {
+      padding: 20px 40px;
+      height: 600px !important;
+    }
+
+    .ui-dialog {
+      width: 720px !important;
+    }
+  }
+}
+
+@media (max-width:1024px) {
+  :host ::ng-deep .members-dialog .ui-dialog {
+    width: 740px !important;
+  }
+
+  .board-container {
+    padding: 10px;
+
+    .btn-create-web {
+      font-size: 12px;
+    }
+
+    .board-header {
+      padding: 10px;
+
+      .btn-action-web {
+        .seach-container {
+          position: relative;
+          left: -20px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width:875px) {
+  .board-container {
+    .board-header {
+      .btn-action-web {
+        .seach-container {
+          position: relative;
+          left: -34px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width:768px) {
+  :host ::ng-deep .members-dialog .ui-dialog {
+    width: 510px !important;
+  }
+
+  .board-container {
+    padding: 0;
+
+    .board-header-container {
+      position: relative;
+      z-index: 999;
+      background: #fff;
+      height: 65px;
+      margin: auto 0;
+    }
+
+    .board-header {
+      padding: 0 10px 5px 10px;
+
+      .btn-action-mobile {
+        display: inline-block;
+      }
+
+      .btn-action-web {
+        display: none;
+      }
+    }
+
+    .btn-create {
+      width: 160px;
+    }
+
+    .board-content {
+      margin-top: 15px;
+      border-top: none;
+
+      .bc-card {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+@media (max-width:570px) {
+  .board-box {
+    margin: 0 auto;
+  }
+
+  .board-all--box {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width:480px) {
+  p-tabmenu {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  :host ::ng-deep .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem .ui-menuitem-link {
+    padding: 10px 40px;
+  }
+
+  .member-card,
+  .member-card-new {
+    margin: 7px auto;
+  }
+
+  .board-container {
+    .board-content {
+      .bc-card {
+        max-width: 330px;
+      }
+    }
+
+    .board-header {
+      padding: 10px;
+    }
+  }
+}
+
+@media (max-width:320px) {
+  .board-container {
+    .board-header {
+      padding: 10px 20px;
+
+      .col-6 {
+        padding-right: 0;
+      }
+    }
+  }
+}

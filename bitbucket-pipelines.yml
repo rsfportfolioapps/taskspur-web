@@ -1,0 +1,52 @@
+image: node:10.15.0
+pipelines:
+  branches:
+   development:
+   - step:
+      name: Build app
+      script: # The script below will build the application.
+       - npm install
+       - npm install -g @angular/cli
+       - ng build --progress=false
+      artifacts:
+       - dist/**
+
+   - step:
+      name: Deploy app
+      script: # Deploy the application to the webserver.
+       - apt-get update
+       - apt-get install ncftp
+       - ncftpput -v -u "bbpipeline_notouch" -p "tAspTXDLzm" -R ftp.taskspur.com /bbpipeline_notouch/dev.taskspur.com/wwwroot $BITBUCKET_CLONE_DIR/dist/**
+   stage:
+   - step:
+      name: Build app
+      script: 
+       - npm install
+       - npm install -g @angular/cli
+       - ng build --prod --configuration=stage --progress=false
+      artifacts:
+       - dist/**
+
+   - step:
+      name: Deploy app
+      script: 
+       - apt-get update
+       - apt-get install ncftp
+       - ncftpput -v -u "bbpipeline_notouch" -p "tAspTXDLzm" -R ftp.taskspur.com /bbpipeline_notouch/stage.taskspur.com/wwwroot $BITBUCKET_CLONE_DIR/dist/**
+   master:
+   - step:
+      name: Build app
+      script: 
+       - npm install
+       - npm install -g @angular/cli 
+       # --aot --build-optimizer are already set in configuration, added to ensure it is build with optimization params
+       - ng build --prod --aot --build-optimizer --configuration=production --progress=false
+      artifacts:
+       - dist/**
+
+   - step:
+      name: Deploy app
+      script: 
+       - apt-get update
+       - apt-get install ncftp
+       - ncftpput -v -u "bbpipeline_notouch" -p "tAspTXDLzm" -R ftp.taskspur.com /bbpipeline_notouch/taskspur.com/wwwroot $BITBUCKET_CLONE_DIR/dist/**

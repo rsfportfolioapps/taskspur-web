@@ -1,0 +1,28 @@
+<div class="fail-container">
+  <div class="fail-header">
+    <img src="../../../../../assets/images/desktop/account_access.png" alt="fail" class="img-responsive">
+  </div>
+  
+  <div class="fail-content" *ngIf="isExist; else needConfirm">
+    <h1>Uh-oh! This account already exists.</h1>
+    <p class="p1">Click here to <a href="/login">sign in.</a></p>
+    <p class="p2">Forgot your password? Click here to <a href="/forgot-password-reset">request a password reset.</a></p>
+  </div>
+
+  <ng-template #needConfirm>
+    <div class="fail-content">
+      <h1>We’ve identified that your account has already been registered but has not been confirmed!</h1>
+      <p class="p1">Please check your email to confirm your account.</p>
+      <p class="p2">If you cannot find our confirmation email, please check your junk or spam folders.</p>
+    </div>
+  </ng-template>
+
+
+  <div class="fail-footer-container">
+    <div class="fail-footer">
+      <p>© Copyright TaskSpur 2019. A Life Intelligence <br class="mobile-br" /> Group Subsidiary <br class="desktop-br" /> All Rights Reserved</p>
+    </div>
+  </div>
+   
+</div>
+  

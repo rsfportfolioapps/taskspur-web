@@ -1,0 +1,116 @@
+<div class="board-container">
+  <div class="board-header-container">
+    <div class="row board-header">
+      <div class="col-6 col-md-4">
+        <h4>Boards</h4>
+        <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+      </div>
+      <div class="col-6 col-md-8 btn-action-container">
+        <div class="btn-action-mobile btn-group" role="group">
+          <button type="button" class="btn btn-search-mobile"><i class="fas fa-search"></i></button>
+          <button type="button" (click)="showAddBoard = !showAddBoard" class="btn btn-create-mobile"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="col-12 btn-action-web">
+          <div class="row">
+            <div class="col p-0">
+              <button type="button" (click)="showAddBoard = !showAddBoard" class="btn btn-create-web float-right">Create New Board</button>
+
+              <app-dropdown-multiselect-filter
+                class="dropdown-multiselect-filter pr-2 float-right"
+                [items]="filterBoards"
+                [selectedItemsLabel]="selectedItemsLabel"
+                [filterPlaceHolder]="filterPlaceHolder"
+                [defaultLabel]="defaultLabel"
+                (selectedItemEmitted)="onFilterByBoards($event)">
+              </app-dropdown-multiselect-filter>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row board-tab__container mb-3">
+    <p-tabMenu [model]="boardTabs" [activeItem]="activeTab">
+      <ng-template pTemplate="tab" let-tab let-i="index">
+        <div style="position: relative; text-align: center; min-width: 10em">
+          <div class="ui-menuitem-text">
+            {{tab.label}}
+          </div>
+        </div>
+      </ng-template>
+    </p-tabMenu>
+  </div>
+
+  <div class="row board-all__container">
+    <div class="board-all--box d-flex flex-row">
+      <div *ngIf="boards.length > 0 && !isArchived" class="bc-card">
+        <div (click)="gotoCard()" class="row bc-content">
+          <div class="col-4 board-all__img-container">
+            <img src="/assets/svg/icon_white_board.svg" />
+          </div>
+          <div class="col">
+            <div class="board-all__title">
+              <h5>All Boards</h5>
+            </div>
+          </div>
+        </div>
+        <div class="row board-all__footer m-auto">
+          <p>Total Boards: <span class="board-all__footer-count">{{ filtered.length || boards.length }}</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- all board -->
+    <!-- <div *ngIf="boards.length > 0 && !isArchived" class="bc-card">
+      <div (click)="gotoCard()" class="row bc-content">
+        <div class="col-4 board-all__img-container">
+          <img src="/assets/svg/icon_white_board.svg" />
+        </div>
+        <div class="col">
+          <div class="board-all__title">
+            <h5>All Boards</h5>
+          </div>
+        </div>
+      </div>
+      <div class="row board-all__footer m-auto">
+        <p>Total Boards: <span class="board-all__footer-count">{{ filtered.length || boards.length }}</span></p>
+      </div>
+    </div> -->
+
+    <!-- boards -->
+    <div *ngFor="let board of (filtered.length > 0 ? filtered : boards); let i = index" class="board-box d-flex justify-content-between">
+      <app-board [board]="board" (reloadEmitter)="load($event)"></app-board>
+    </div>
+
+
+  </div>
+</div>
+
+<p-confirmDialog appendTo="body" positionTop="200" key="bc" header="Confirmation"></p-confirmDialog>
+
+<!-- add board dialog -->
+<p-dialog
+  [modal]="true"
+  [styleClass]="'board-dialog'"
+  [(visible)]="showAddBoard"
+  [responsive]="true"
+  [transitionOptions]="'150ms'"
+  [baseZIndex]="baseZIndex"
+  [positionTop]="positionTop"
+  [header]="'Create New Board'"
+  [transitionOptions]="'150ms'"
+  [closable]="true"
+  [closeOnEscape]="true">
+  <app-board-detail [aeMode]="aeModeNew" (formEmitter)="boardDetailComponent.form = $event" (reloadEmitter)="load($event)"></app-board-detail>
+  <p-footer>
+    <button type="button" class="btn btn-create" [disabled]="!boardDetailComponent.form.valid" (click)="onBoardSave()">Save</button>
+    <button type="button" class="btn btn-cancel" (click)="showAddBoard=false">Cancel</button>
+  </p-footer>
+</p-dialog>
+
+<app-bs-modal [modalId]="'membersModal'" [maxWidth]="'940px'" [modalTitle]="'Members'">
+  <ng-container class="body">
+    <app-board-member [members]="members"></app-board-member>
+  </ng-container>
+</app-bs-modal>

@@ -1,0 +1,149 @@
+<div class="card-container">
+  <div class="row">
+    <div class="col-3 col-md-4">
+      <h4>Cards</h4>
+      <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+    </div>
+    <div class="col-9 col-md-8">
+      <div class="p-0 cs-web-container">
+        <button type="button" (click)="showAddBoard = !showAddBoard" class="btn btn-create float-right">
+          <span class="create-text">Create New Board</span></button>
+
+        <app-dropdown-multiselect-filter
+          *ngIf="defaulFilterValues"
+          class="dropdown-multiselect-filter pr-2 float-right"
+          [items]="boardFilters"
+          [selectedItemsLabel]="selectedItemsLabel"
+          [filterPlaceHolder]="filterPlaceHolder"
+          [defaultLabel]="defaultLabel"
+          (selectedItemEmitted)="onFilterCardByBoards($event.value)"
+          [defaulFilterValues]="defaulFilterValues">
+        </app-dropdown-multiselect-filter>
+      </div>
+
+      <div class="text-right sort-container-mobile">
+        <ng-container *ngTemplateOutlet="itemsView"></ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOVE TO ANOTHER COMPONENT -->
+  <div class="card-content-lg">
+    <div class="row cc-web-container mt-2 mb-2">
+      <div class="col-4 col-md-4 col-lg-4 p-0">
+        <app-search (searchEmitter)="onSearch($event)"></app-search>
+      </div>
+      <div class="col-3 col-md-3 col-lg-2 text-left">
+        <button type="button" (click)="onShowCardDialog()" class="btn btn-create float-left">Create New Card</button>
+      </div>
+      <div class="col-5 col-md-5 col-lg-6 text-right sort-container-web">
+        <ng-container *ngTemplateOutlet="itemsView"></ng-container>
+      </div>
+    </div>
+
+    <div class="cc-mobile-container mt-2 mb-2">
+      <div class="row">
+        <div class="col-9 p-0">
+          <app-search></app-search>
+        </div>
+        <div class="col p-0 text-center">
+          <button type="button" class="btn btn-filter-mobile ml-1"><i class="fas fa-search"></i></button>
+          <button type="button" class="btn btn-create-mobile ml-2" (click)="onShowCardDialog()"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- archived cards -->
+    <div *ngIf="getCardView() === 3" class="card">
+      <div class="card-header ch-1" [ngClass]="{'collapsed': collapsed}" [attr.aria-expanded]="collapsed"
+        data-toggle="collapse" [attr.data-target]="'#collapseArchive'" [attr.aria-controls]="'collapseArchive'">
+        <span>Archived</span>
+        <span class="card-count float-right">{{ archievedCards.length }}</span>
+      </div>
+      <div class="card-body collapsed" id="collapseArchive">
+        <app-card-archive-view
+          *ngIf="archievedCards"
+          (cardIdEmitter)="onEdit($event)"
+          [cards]="archievedCards">
+        </app-card-archive-view>
+      </div>
+    </div>
+
+    <!-- thumbnail and listview cards -->
+    <div *ngIf="getCardView() !== 3" class="row">
+      <div *ngFor="let status of cardStatus; let i = index" class="p-1 card-accordion" [ngClass]="getCardView() === 2 ? 'col-12' :  'col-lg-3'">
+        <div class="card-row">
+          <div class="card">
+            <div class="card-header ch-1" [ngClass]="{'collapsed': collapsed}" [attr.aria-expanded]="collapsed"
+              data-toggle="collapse" [attr.data-target]="'#collapse' + status.value" [attr.aria-controls]="'collapse'+ status.value">
+              <span>{{ status.label }}</span>
+              <span class="card-count float-right">{{ getStatusCards(status.value).length }}</span>
+            </div>
+            <div class="card-body collapse"
+              [ngClass]="isMobileScreen && i === 0 ? 'show': '' 
+              || collapsed && i === 0 && getCardView() !== 3 ? 'show': '' 
+              || collapsed && getCardView() !== 3 ? 'show': ''"
+              id="collapse{{status.value}}">
+              <app-card-list-view
+                *ngIf="getCardView() === 2"
+                [cards]="getStatusByCards(initialCards, status.value)"
+                (reloadEmitter)="load($event)">
+              </app-card-list-view>
+              <app-card
+                *ngIf="cards && getCardView() === 1"
+                (reloadEmitter)="load($event)"
+                [cards]="getStatusByCards(initialCards, status.value)">
+              </app-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add card dialog -->
+<p-dialog
+  [modal]="true"
+  [styleClass]="'card-dialog'"
+  [(visible)]="showAddCardDialog"
+  [responsive]="true"
+  [baseZIndex]="baseZIndex"
+  [positionTop]="positionTop"
+  header="Create New Card"
+  [contentStyle]="contentStyle"
+  [transitionOptions]="'150ms'">
+  <app-card-detail [aeMode]="getCardView() === 1 ? 1 : 3" (formEmitter)="cdc.form = $event" (reloadEmitter)="load($event)"></app-card-detail>
+  <p-footer>
+    <button type="button" class="btn btn-create" [disabled]="!cdc.form.valid" (click)="onSaveUpdate()">Save</button>
+    <button type="button" class="btn btn-cancel" (click)="onClose()">Cancel</button>
+  </p-footer>
+</p-dialog>
+
+<!-- add board dialog -->
+<p-dialog
+  [modal]="true"
+  [styleClass]="'board-dialog'"
+  [(visible)]="showAddBoard"
+  [responsive]="true"
+  [transitionOptions]="'150ms'"
+  [baseZIndex]="baseZIndex"
+  [positionTop]="positionTop"
+  [header]="'Create New Board'"
+  [contentStyle]="contentStyle"
+  [transitionOptions]="'150ms'">
+  <app-board-detail aeMode="1" [fromCard]="'true'" (formEmitter)="bdc.form = $event" (reloadEmitter)="load($event)"></app-board-detail>
+  <p-footer>
+    <button type="button" class="btn btn-create" [disabled]="!bdc.form.valid" (click)="onBoardSave()">Save</button>
+    <button type="button" class="btn btn-cancel" (click)="onClose()">Cancel</button>
+  </p-footer>
+</p-dialog>
+
+<!-- card views -->
+<ng-template #itemsView>
+  <img (click)="setCardView(1)" src="/assets/svg/{{ getCardView() !== 1 ? 'in': '' }}active-grid-view.svg" />
+  <img (click)="setCardView(2)" src="/assets/svg/{{ getCardView() !== 2 ? 'in': '' }}active-list-view.svg" />
+  <img (click)="setCardView(3)" src="/assets/svg/{{ getCardView() !== 3 ? 'in': '' }}active_archive.svg" />
+</ng-template>
+
+<p-confirmDialog appendTo="body" positionTop="200" key="bc" header="Confirmation"></p-confirmDialog>

@@ -1,0 +1,133 @@
+<div class="row m-0 p-2">
+  <table class="table" *ngFor="let card of cards; let i = index">
+    <thead *ngIf="i === 0">
+      <tr>
+        <th>CARD TITLE</th>
+        <th>DUE DATE</th>
+        <th>PRIORITY</th>
+        <th>DIFFICULTY</th>
+        <th>STATUS</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tr>
+      <td (click)="onEdit(card.id)">{{card.name}}</td>
+      <td>{{ card.expectedCompletion | date: 'MM/dd/yyyy' }}</td>
+      <td>
+        <button
+          *ngIf="card.important"
+          type="button"
+          class="btn-challenging">Important
+        </button>
+
+        <button
+          *ngIf="card.urgent"
+          type="button"
+          class="btn-challenging">Urgent
+        </button>
+
+      </td>
+      <td>
+        <button
+          type="button"
+          class="btn-{{ getCardPoint(card.point)  | lowercase }} active ml-2 mr-2">
+          {{ getCardPoint(card.point) }}
+        </button>
+      </td>
+      <td>
+        {{cardStatus[card.status].label}}
+      </td>
+      <td>
+        <span class="badge-red">3</span>
+        <img class="table-action__icon" src="/assets/svg/icon-time.svg" />
+        <!-- <span class="badge-warning">4</span>
+        <img class="table-action__icon" src="/assets/svg/icon-attached.svg" />
+        <span class="badge-primary">5</span>
+        <img class="table-action__icon" src="/assets/svg/icon-comments.svg" /> -->
+        <i (click)="selectCardOption($event, card)" class="fas fa-ellipsis-v"></i>
+
+
+        <p-overlayPanel appendTo="body" [dismissable]="true" #op>
+          <ul class="list-group list-group-flush">
+            <li
+              (click)="onCopy()"
+              class="list-group-item"><img src="/assets/svg/icon_clone.svg" /> Copy</li>
+            <li
+              (click)="onReschedule()"
+              data-toggle="modal" data-target="#rescheduleModal"
+              class="list-group-item"><img src="/assets/svg/icon_reschedule.svg" /> Reschedule</li>
+          </ul>
+          <div class="popover-menu-title">
+            <label>Transition to:</label>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li
+              (click)="onUpdateStatus(card.id, cardStatus.Later)"
+              [hidden]="isActiveStatus(card.status, cardStatus.Later)"
+              class="list-group-item border-0"><img src="/assets/svg/icon_moveto.svg" /> Later</li>
+            <li
+              (click)="onUpdateStatus(card.id, cardStatus.Today)"
+              [hidden]="isActiveStatus(card.status, cardStatus.Today)"
+              class="list-group-item border-0"><img src="/assets/svg/icon_moveto.svg" /> Today</li>
+            <li
+              (click)="onUpdateStatus(card.id, cardStatus.Doing)"
+              [hidden]="isActiveStatus(card.status, cardStatus.Doing)"
+              class="list-group-item"><img src="/assets/svg/icon_moveto.svg" /> Doing</li>
+            <li
+              (click)="onUpdateStatus(card.id, cardStatus.Done)"
+              [hidden]="isActiveStatus(card.status, cardStatus.Done)"
+              class="list-group-item"><img src="/assets/svg/icon_moveto.svg" /> Done</li>
+            <li
+              (click)="onDelete(card)"
+              class="list-group-item"><img src="/assets/svg/icon_delete.svg" /> Delete</li>
+            <li
+              (click)="onArchive(card)"
+              class="list-group-item border-0"><img src="/assets/svg/icon_archive.svg" /> Archive</li>
+          </ul>
+
+        </p-overlayPanel>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- edit card dialog -->
+<p-dialog
+  [modal]="true"
+  [styleClass]="'card-dialog'"
+  responsive="true"
+  [baseZIndex]="baseZIndex"
+  [positionTop]="positionTop"
+  [(visible)]="showEditCardDialog"
+  header="Edit Card"
+  [contentStyle]="contentStyle"
+  [transitionOptions]="'150ms'">
+  <app-card-detail [aeMode]="2" (formEmitter)="cdc.form = $event" (reloadEmitter)="reloadEmitter.emit($event)">
+  </app-card-detail>
+  <p-footer>
+    <button type="button" class="btn btn-create" [disabled]="!cdc.form.valid"  (click)="onUpdate()">Update</button>
+    <button type="button" class="btn btn-cancel" (click)="onClose()">Cancel</button>
+  </p-footer>
+</p-dialog>
+
+<!-- copy dialog -->
+<p-dialog
+  [modal]="true"
+  [styleClass]="'card-dialog'"
+  [(visible)]="showCopyCardDialog"
+  [responsive]="true"
+  [baseZIndex]="baseZIndex"
+  [positionTop]="positionTop"
+  header="Copy Card"
+  [contentStyle]="contentStyle"
+  [transitionOptions]="'150ms'">
+  <app-card-detail 
+    [aeMode]="3" 
+    (formEmitter)="cdc.form = $event"
+    (reloadEmitter)="reloadEmitter.emit($event)">
+  </app-card-detail>
+  <p-footer>
+    <button type="button" class="btn btn-create" [disabled]="!cdc.form.valid" (click)="onSaveCopy()">Copy</button>
+    <button type="button" class="btn btn-cancel" (click)="onClose()">Cancel</button>
+  </p-footer>
+</p-dialog>

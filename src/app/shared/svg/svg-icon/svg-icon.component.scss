@@ -1,0 +1,38 @@
+:host {
+  .svg {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+  }
+  .f-1 {
+    fill: #4064ac !important;
+  }
+  .g-1 {
+    fill: #fbbb00 !important;
+  }
+  .g-2 {
+    fill: #518ef8;
+  }
+  .g-3 {
+    fill: #28b446;
+  }
+  .g-4 {
+    fill: #f14336;
+  }
+
+  @media (max-width: 480px) {
+    .svg {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .svg {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+
